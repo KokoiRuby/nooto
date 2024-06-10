@@ -54,8 +54,8 @@
 
 - Primary thread pull conf from istiod via xDS API.
   - *Managers subscribe & save to TLS (Thread-local Slot) shared by Worker Threads.
-- Worker threads read conf in TLS
-  - incoming req will handled by ConnectionHandler
+- Worker threads read conf in TLS.
+  - incoming req will handled by ConnectionHandler.
 
 
 
@@ -65,6 +65,36 @@
 
 :confused: **[xDS](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration)?** 
 
-- API exposed by control plane (istiod) for Envoy to fetch conf
+- API exposed by control plane (istiod) for Envoy to fetch conf.
   - Listener | Route | Cluster | Endpoint
+  
   - Secret | Health | Aggregated
+  
+    
+
+:confused: [Config](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-static)?
+
+- [Static](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-static#start-quick-start-static-listeners)
+  - listeners: a group of ip:port where Envoy starts & listens on
+    - filter_chains
+      - route_config → virtual_hosts → routes → cluster
+  - clusters: a group of cluster where Envoy will proxy
+- Dynamic [from filesystem](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-dynamic-filesystem#) & [control plane](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-dynamic-control-plane#)
+  - dynamic_resources
+    - xds_config
+  - static_resources (control plane only) → src to fetch conf = to send xDS
+
+
+
+:confused: [Securing](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/securing)?
+
+- Downstream
+  - listeners
+    - transport_socket → common_tls_context
+      - common_tls_context (server keypair)
+      - (mTLS) require_client_certificate
+      - (mTLS) validation_context (ca cert)
+- Upstream
+  - clusters
+    - transport_socket → common_tls_context
+      - validation_context (ca cert & SAN)
