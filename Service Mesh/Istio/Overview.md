@@ -24,6 +24,13 @@
 
 
 
+:confused: **Limitation of K8s svc & ingress?**
+
+- svc     → L4 (IP:port) only, limited LB strategy, does not support keep-alived conn
+- ingress → L7 but HTTP/HTTPS only, does not support gRPC, limitation LB strategy like header-based.
+
+
+
 :confused: **What happened now?**
 
 - Calls btw svc → Calls btw Sidecar Proxies.
@@ -46,7 +53,40 @@
 
 :confused: **Pros vs. Cons?**
 
+:smile: Business Logic & Platform Features decoupled; Developers only needs to focus Business Logic.
+
+:cry: Complexity ↑ | Extra hop in kernel → un-friendly to High-concurrency & Delay-sensitive.
 
 
 
+:confused: **What is Istio ⛵?**
+
+- An impl of Service Mesh, an platform for providing a uniform way to:
+  - integrate microservices.
+  - manage traffic flow across.
+  - enforce policy.
+  - aggregate telemetry data.
+
+
+
+:confused: **Istio Arch?**
+
+- **Envoy** as Data Plane
+- **Istiod** as Control Plane
+  - **Pilot** - Responsible for <u>configuring</u> the proxies at runtime.
+  - **Citadel** - Responsible for <u>certificate</u> issuance and rotation.
+
+  - **Galley** - Responsible for validating, ingesting, aggregating, transforming and distributing config within Istio.
+
+
+
+![The overall architecture of an Istio-based application.](https://istio.io/latest/docs/ops/deployment/architecture/arch.svg)
+
+
+
+:confused: **istio features?**
+
+
+
+<img src="Overview.assets/Istio.png" alt="img" style="zoom: 50%;" />
 
