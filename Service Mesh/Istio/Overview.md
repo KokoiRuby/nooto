@@ -53,9 +53,9 @@
 
 :confused: **Pros vs. Cons?**
 
-:smile: Business Logic & Platform Features decoupled; Developers only needs to focus Business Logic.
+- :smile: Business Logic & Platform Features decoupled; Developers only needs to focus Business Logic.
 
-:cry: Complexity ↑ | Extra hop in kernel → un-friendly to High-concurrency & Delay-sensitive.
+- :cry: Complexity ↑ | Extra hop in kernel → un-friendly to High-concurrency & Delay-sensitive.
 
 
 
@@ -84,7 +84,7 @@
 
 
 
-:confused: **istio features?**
+:confused: **Istio Features?**
 
 
 
