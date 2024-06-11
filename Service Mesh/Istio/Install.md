@@ -37,13 +37,7 @@ $ istioctl manifest generate > istio-manifest.yaml
 
 ```bash
 # uninstall
-istioctl uninstall --purge 
-```
-
-### Istio Operator
-
-```bash
-
+$ istioctl uninstall --purge 
 ```
 
 ### Helm
