@@ -84,9 +84,3 @@
 
 
 ![image.png | left | 396x242](https://gw.alipayobjects.com/mdn/rms_da499f/afts/img/A*77gySo2CTewAAAAAAAAAAABjARQnAQ)
-
-
-
-:confused: **Learner?**
-
-- 
