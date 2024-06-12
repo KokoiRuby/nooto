@@ -12,12 +12,12 @@
 
 
 
-:confused: **[Raft](https://thesecretlivesofdata.com/raft/)?** Membership: Leader | Follower | Candidate
+:confused: **[Raft](https://thesecretlivesofdata.com/raft/)?** Membership: Leader| Follower | Candidate
 
 1. All members start as Follower with a random timer.
 2. Member sends votes to rest when timer timeout.
-3. Member becomes Leader if received N/2+1 acks & send heartbeats to rest
-4. Members receive heartbeat become Follower & reset timer.
+3. Member becomes Leader if received N/2+1 acks & send **heartbeats** to rest
+4. Members receive **heartbeat** become Follower & reset timer.
 5. If no heartbeat received within timeout = Leader Lost, it becomes Candidate and Term+1.
 
 **Note: One vote per term only.**
@@ -30,8 +30,8 @@
 
 :confused: **Why odd member?**
 
-- Make sure uneven votes, more than half + less than half
-- Avoid same votes → re-election.
+- Make sure uneven votes, always more than half.
+- Avoid even votes → re-election → extra cost
 
 
 
@@ -54,7 +54,8 @@
   2. Leader Consensus Module writes (entry) to local log.
   3. Leader sends **AppendEntries RPC** to Followers (write to local log as well).
   4. Leader commits to State Machine if receive majority of ACK
-  5. Leader → Client
+  5. Follower commit to State Machine
+  6. Leader → Client
 
 
 
@@ -64,8 +65,8 @@
 
 :confused: **Log Matching？**
 
-- Index: to identify entry pos in log.
-- Last Applied Index: The index of the last entry that has been applied to the state machine. 
+- **Index**: to identify entry pos in log.
+- **Last Applied Index**: The index of the last entry that has been applied to the state machine. 
 - Once Followers receive **AppendEntries RPC**, it will compare the index/term/content btwlocal & the ones sent from Leader.
   - If Leader index/term is larger/newer, Follower will start to replicate log (behind).
   - If Leader index/term macthed, will compare content & sync-up.

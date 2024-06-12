@@ -10,13 +10,13 @@
 
 - KV storage
 
-- Key watch/TTL
+- Key TTL/Lease for watch & svc discovery
 
 - Fast 1000 W/s & 2000 R/s
 
   
 
-:confused: **Quickstart?**
+:confused: **[Quickstart](https://github.com/KokoiRuby/docker/tree/main/etcd)?**
 
 
 
