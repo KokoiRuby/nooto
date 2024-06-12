@@ -10,9 +10,9 @@
 
 2. **Network Partition** (3-node cluster)
 
-   
 
-   <img src="https://etcd.io/docs/v3.5/learning/img/server-learner-figure-02.png" alt="server-learner-figure-02" style="zoom:67%;" />
+
+<img src="https://etcd.io/docs/v3.5/learning/img/server-learner-figure-02.png" alt="server-learner-figure-02" style="zoom:67%;" />
 
 
 
