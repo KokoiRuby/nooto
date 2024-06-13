@@ -14,7 +14,38 @@
 
 - Fast 1000 W/s & 2000 R/s
 
-  
+
+
+
+:confused: **CAP?**
+
+- **C**onsistency, **A**vailability, (Network) **P**artition tolerance
+- P must be secured. CP or AP only.
+
+
+
+:confused: **Arch?**
+
+
+
+![img](https://upload-images.jianshu.io/upload_images/9243349-d3a5a1c4b81aa3c3.png?imageMogr2/auto-orient/strip|imageView2/2/w/823/format/webp)
+
+:confused: **Client [Arch](https://etcd.io/docs/v3.5/learning/design-client/)?**
+
+| Term                 | Desc                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| Balancer             | Impl retry & failover.                                       |
+| Endpoints            | A list of etcd servers endpoints.                            |
+| Pinned endpoint      | **RR for every req since v3.4.**                             |
+| Client Connection    | gRPC btw.                                                    |
+| Sub Connection       | Per endpoint.                                                |
+| Transient disconnect | [`code Unavailable`](https://godoc.org/google.golang.org/grpc/codes#Code). |
+
+
+
+![client-balancer-figure-09.png](https://etcd.io/docs/v3.5/learning/img/client-balancer-figure-09.png)
+
+
 
 :confused: **[Quickstart](https://github.com/KokoiRuby/docker/tree/main/etcd)?**
 
@@ -65,8 +96,3 @@
 
 - raft_term
 
-  
-
-:confused: **OAM?**
-
-- 
