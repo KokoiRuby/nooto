@@ -10,11 +10,3 @@
 :confused: **How does it work?**
 
 - Randomly pick one server endpoint, swtich if detects failure.
-
-
-
-
-
-```bash
-$ etcd grpc-proxy start --endpoints=infra0.example.com,infra1.example.com,infra2.example.com --listen-addr=127.0.0.1:2379
-```

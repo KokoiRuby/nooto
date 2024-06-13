@@ -47,7 +47,7 @@
 
 
 
-:confused: **[Quickstart](https://github.com/KokoiRuby/docker/tree/main/etcd)?**
+:confused: **[Quickstart](https://github.com/KokoiRuby/docker/tree/main/etcd_new)?**
 
 
 
