@@ -28,6 +28,18 @@
 
 
 
+:confused: **vs?**
+
+| Solution | Strategy | IPv6 | Layer                    | Commandline |
+| -------- | -------- | ---- | ------------------------ | ----------- |
+| Calico   | Y        | Y    | L2(VxLAN), L3(IPIP, BGP) | calicoctl   |
+| Cillium  | Y        | Y    | L3/L4 + L7               | cilium      |
+| Contiv   | N        | Y    | L2(VxLAN), L3(BGP)       | N/A         |
+| Flannel  | N        | N    | L2(VxLAN)                | N/A         |
+| Weave    | Y        | Y    | L2(VxLAN)                | N/A         |
+
+
+
 :construction_worker: **Plugin Guideline**
 
 - CR needs to create a new net ns before calling any plugins.

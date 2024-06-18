@@ -1,0 +1,214 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "1"
+    meta.helm.sh/release-name: openstack-cinder
+    meta.helm.sh/release-namespace: kube-system
+  creationTimestamp: "2024-06-12T10:03:46Z"
+  generation: 1
+  labels:
+    app: openstack-cinder-csi
+    app.kubernetes.io/managed-by: Helm
+    ccd/addon: openstack-cinder
+    chart: openstack-cinder-csi-2.2.0_5
+    component: nodeplugin
+    heritage: Helm
+    release: openstack-cinder
+  name: openstack-cinder-csi-nodeplugin
+  namespace: kube-system
+  resourceVersion: "1457679"
+  uid: db53748f-97e1-49b7-80d7-bdffc603b926
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: openstack-cinder-csi
+      component: nodeplugin
+      release: openstack-cinder
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: openstack-cinder-csi
+        ccd/addon: openstack-cinder
+        chart: openstack-cinder-csi-2.2.0_5
+        component: nodeplugin
+        heritage: Helm
+        release: openstack-cinder
+    spec:
+      affinity: {}
+      containers:
+      - args:
+        - -v=2
+        - --csi-address=$(ADDRESS)
+        - --kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock
+        - name: DRIVER_REG_SOCK_PATH
+          value: /var/lib/kubelet/plugins/cinder.csi.openstack.org/csi.sock
+        - name: KUBE_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: registry.eccd.local:5000/node-driver-registrar:v2.4.0-74-ecb4e718
+        imagePullPolicy: IfNotPresent
+        name: node-driver-registrar
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /csi
+          name: socket-dir
+        - mountPath: /registration
+          name: registration-dir
+      - args:
+        - -v=2
+        - --csi-address=/csi/csi.sock
+        image: registry.eccd.local:5000/livenessprobe:v2.10.0-74-ecb4e718
+        imagePullPolicy: IfNotPresent
+        name: liveness-probe
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /csi
+          name: socket-dir
+      - args:
+        - /bin/cinder-csi-plugin
+        - -v=2
+        - --endpoint=$(CSI_ENDPOINT)
+        - --cloud-config=$(CLOUD_CONFIG)
+        env:
+        - name: CSI_ENDPOINT
+          value: unix://csi/csi.sock
+        - name: CLOUD_CONFIG
+          value: /etc/kubernetes/cloud.conf
+        - name: http_proxy
+          value: https://openstack-proxy.kube-system.svc.cluster.local:9090
+        - name: https_proxy
+          value: https://openstack-proxy.kube-system.svc.cluster.local:9090
+        image: registry.eccd.local:5000/cinder-csi-plugin:v1.28.1-5-ecb4e718
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz
+            port: healthz
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        name: cinder-csi-plugin
+        ports:
+        - containerPort: 9808
+          name: healthz
+          protocol: TCP
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+            - SYS_ADMIN
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /csi
+          name: socket-dir
+        - mountPath: /var/lib/kubelet
+          mountPropagation: Bidirectional
+          name: kubelet-dir
+        - mountPath: /dev
+          mountPropagation: HostToContainer
+          name: pods-probe-dir
+        - mountPath: /etc/cacert
+          name: cacert
+          readOnly: true
+        - mountPath: /etc/kubernetes
+          name: cloud-config
+          readOnly: true
+        - mountPath: /etc/ssl/certs/
+          name: cert
+          readOnly: true
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - /bin/cat /etc/kubernetes/ca.crt /etc/ssl/proxy/ca.crt > /etc/ssl/certs/ca.crt
+        image: registry.eccd.local:5000/httpd:v2.4.51-53-ecb4e718
+        imagePullPolicy: IfNotPresent
+        name: cert-combiner
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/kubernetes
+          name: cloud-config
+          readOnly: true
+        - mountPath: /etc/ssl/proxy
+          name: os-proxy-cert
+        - mountPath: /etc/ssl/certs
+          name: cert
+      - command:
+        - /bin/sh
+        - -c
+        - |
+          set -x; while [ $(curl -sw '%{http_code}' --insecure "https://openstack-proxy.kube-system.svc.cluster.local:9090/index.html" -o /dev/null) -ne 200 ]; do sleep 
+5; done
+        image: registry.eccd.local:5000/httpd:v2.4.51-53-ecb4e718
+        imagePullPolicy: IfNotPresent
+        name: wait-for-openstack-proxy
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: csi-cinder-node-sa
+      serviceAccountName: csi-cinder-node-sa
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - operator: Exists
+      volumes:
+      - hostPath:
+          path: /var/lib/kubelet/plugins/cinder.csi.openstack.org
+          type: DirectoryOrCreate
+        name: socket-dir
+      - hostPath:
+          path: /var/lib/kubelet/plugins_registry/
+          type: Directory
+        name: registration-dir
+      - hostPath:
+          path: /var/lib/kubelet
+          type: Directory
+        name: kubelet-dir
+      - hostPath:
+          path: /dev
+          type: Directory
+        name: pods-probe-dir
+      - name: os-proxy-cert
+        secret:
+          defaultMode: 420
+          secretName: openstack-proxy-cert
+      - emptyDir: {}
+        name: cert
+      - name: cloud-config
+        secret:
+          defaultMode: 420
+          secretName: cinder-csi-cloud-config
+      - hostPath:
+          path: /etc/cacert
+          type: ""
+        name: cacert
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
