@@ -1,0 +1,1 @@
+[Ref.](https://dramasamy.medium.com/life-of-a-packet-in-kubernetes-part-1-f9bc0909e051)
