@@ -35,8 +35,6 @@ $ iptables-save
 $ iptables --flush
 ```
 
-
-
 ### :bookmark_tabs: Cheatsheet
 
 ```bash

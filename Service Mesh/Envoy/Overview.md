@@ -31,8 +31,9 @@
 - **Host**: a logical network app
 - **Downstream**: a host sends req to Envoy
 - **Upstream**: a host recv conn from Envoy & return resp
-- **Listener**: exposed by Envoy to **Downstream**
-- **Cluster**: a group of **Upstream**
+- **Listener**: exposed by Envoy to **Downstream**, tell Envoy where to listen for incoming conn
+- **Cluster**: a group of **Upstream/Endpoints** to which Envoy can route
+- **Endpoint**: instance of service, the actual dst.
 
 
 

@@ -28,7 +28,7 @@ $ /usr/local/bin/envoy --config-yaml /path/to/envoy-override.yaml
 $ /usr/local/bin/envoy --mode validate -c /etc/envoy/envoy.yaml
 $ /usr/local/bin/envoy --log-path /path/to/custom.log
 $ /usr/local/bin/envoy --log-level [trace|debug|info|warn|error|critical|off]
-$ /usr/local/bin/envoy -- --component-log-level comp:level[,comp:level]
+$ /usr/local/bin/envoy --component-log-level comp:level[,comp:level]
 ```
 
 
