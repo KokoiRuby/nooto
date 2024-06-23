@@ -20,3 +20,30 @@ The **control plane** manages and configures the proxies to route traffic.
   - **Dynamic Updates**
     - Watch & distribute.
 
+
+
+### Flow
+
+productpage → reviews where
+
+- Routes by match → `VirtualServices` → ++entry in routes
+- Subsets         → `DestinationRule` → ++entries in clusters
+
+```bash
+$ POD_NAME=$(kubectl get pod -l app=productpage -n default -o jsonpath='{.items[0].metadata.name}')
+
+# listener
+$ istioctl proxy-config listeners $POD_NAME
+
+# clusters
+$ istioctl proxy-config clusters $POD_NAME
+
+# routes 
+$ istioctl proxy-config routes $POD_NAME
+```
+
+
+
+
+
+![img](https://miro.medium.com/v2/resize:fit:1380/1*HTStO76UNJwYVr9PY-s6dQ.png)
