@@ -1,20 +1,13 @@
 :confused: **Why Monitoring?**
 
-- Know ur sys better such as svc running/health status → secure availability.
+- To sense whether system is functioning well, business is serving well.
+- Prediction by tread.
+- Waterlevel ref. to scaling.
+- Ref. to optimication.
 
 
 
-:confused: **Target of?**
-
-- Prediction by tendency.
-- vs.
-- Alert.
-- Troubleshooting.
-- Visualization.
-
-
-
-:confused: **Category?**
+:confused: **Monitoring Category?**
 
 
 
@@ -35,13 +28,69 @@
 
 
 
+:confused: **Observability?** Metrics/Logs out → Monitroing & Tracing.
+
+- Metrics: Prometheus, InfluxDB, Zabbix.
+- Logging: Loki, ELK.
+- Tracing: Jaeger, Zipkin, Skywalking.
+
+
+
+:confused: **Metric Type?**
+
+- **Global ID String**: (Zabbix)
+
+  - :smile: Simple.
+  - :cry: No extra dimention, need appending to name, messy.
+
+  ```json
+  // 每 30s 采集主机已使用内存
+  {
+      "name": "host.10.2.3.4.mem_used_percent",
+      "points": [
+          {
+              "clock": 1662449136,
+              "value": 45.4
+          },
+          ...
+      ]
+  }
+  ```
+
+- **LabelSet** (Prometheus, OpenTSDB)
+
+  - name + timestamp + k/v label
+
+  ```bash
+  mysql.bytes_received 1287333217 327810227706 schema=foo host=db1
+  ```
+
+- **Influx** (InfluxDB)
+
+  - measurement(,tag_set), field_set, timestamp(ns)
+
+  ```bash
+  mysql,schema=foo,host=db1 bytes_received=327810227706,bytes_sent=6604859181710 
+  ```
+
+
+
+:confused: **Genearl Arch?**
+
+- **Collector**: coupled with the monitored vs. centralized probe → the monitored.
+- **TSDB**: OpenTSDB, InfluxDB, TDEngine, M3DB, VictoriaMetrics, TimescaleDB.
+- **Alert Engine**: generates & sends alert by rules. Data-triggered vs. Polling
+- **Display**: Grafana → Ad-hoc + Dashboard.
+
+
+
 :confused: **What is Prometheus?**
 
 - An open-source systems <u>monitoring & alerting</u> toolkit.
 
 
 
-:confused: **Arch?**
+:confused: **Prometheus [Arch](https://prometheus.io/docs/introduction/overview/#architecture)?** 
 
 - Prometheus server
   - Retrival: Target Discovery & Scaper to.
@@ -56,9 +105,26 @@
 
 
 
+:confused: [**Service Discovery](https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects)?** Static Stock → Dynmiac in Cloud Native
+
+- conf-based.
+
+  :smile: simple yaml, easy to automate, .
+
+  :cry: Isolated island → solved by federation.
+
+- K8s SD.
+
+- Public-cloud API.
+
+- Consul.
+
+
+
 :confused: **Data Model?**
 
 - Metrics (name + k/v *N) → Sample(value + timestamp) * N
+- `__name__` is a reserved label that represents the metric name or id of a time series.
 
 
 
@@ -117,3 +183,7 @@ metrics.AddAPIServerRequest(controllerName,
 
 
 
+:confused: **Recording [Rule](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules)?**
+
+- It allsows to precompute frequently needed or computationally expensive expressions and save their result as a new set of time series. 
+- Querying the precomputed result will then often be much **faster** than executing the original expression every time it is needed.

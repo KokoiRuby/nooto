@@ -2,27 +2,27 @@
 
 - **Filter**
 
-  - Instance Query "斬"
+  - Instance Query "斬" きり
 
     - `--query.lookback-delta` (5min), shorter like 1min to avoid alarm triggered too frequently (for). 
 
     ```sql
-    # filter by Label
+    -- filter by Label
     node_load1{zone="sh"}
     node_load1{host=~"host0.*"}
     
-    # __name__ hidden key to filter.
+    -- __name__ hidden key to filter.
     {__name__=~"node_load.*", zone="sh"}
     ```
 
   - Range Query　"AOE": based freq, if scrape/10s, them 6 samples in 1min.
 
     ```sql
-    # ++[1m]
+    -- ++[1m]
     {__name__=~"node_load.*", zone="sh"}[1m]
     ```
 
-- **Re-calculation**
+- **Secondary Computation**
 
   - Arithmetic
 
@@ -46,8 +46,8 @@
   - Vector Matching: join-like
 
     ```sql
-    # Check slave_sql_running is MySQL instance is a slave.
-    # match by label "instace"
+    -- Check slave_sql_running is MySQL instance is a slave.
+    -- match by label "instace"
     mysql_slave_status_slave_sql_running == 0
     and ON (instance)
     mysql_slave_status_master_server_id > 0
@@ -110,7 +110,7 @@
 - [increase](https://prometheus.io/docs/prometheus/latest/querying/functions/#increase): accept a range vector → **increment** within time duration.
 
   ```sql
-  # sample/10s
+  -- sample/10s
   net_bytes_recv{interface="eth0"}[1m]
   965304237246 @ 1661570850
   965307953982 @ 1661570860
@@ -132,7 +132,7 @@
 
   ```sql
   rate(net_bytes_recv{interface="eth0"}[1m])
-  # =
+  -- =
   increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   ```
 

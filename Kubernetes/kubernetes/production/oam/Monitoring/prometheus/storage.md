@@ -77,6 +77,23 @@
 
 
 
-:confused: **Capacity?**
+:confused: **[Capacity](https://prometheus.io/docs/prometheus/latest/storage/#operational-aspects)?**
 
 - needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample
+- Federation incase single-host cannot hold.
+
+```yaml
+scrape_configs:
+  - job_name: 'federate'
+    scrape_interval: 30s
+    honor_labels: true         # preserve original labels when aggregation.
+    metrics_path: '/federate'  # edeges expose /federate 
+    params: 
+      'match[]':               # match prefix
+        - '{__name__=~"aggr:.*"}'
+    static_configs:
+    	- targets:
+    	  - '10.1.2.3:9090'
+    	  - '10.1.2.4:9090'
+```
+
