@@ -46,3 +46,4 @@ In Mesh Routing
 
 
 ![Basic ztunnel L4-only datapath](https://istio.io/latest/docs/ambient/architecture/data-plane/ztunnel-datapath-1.png)
+

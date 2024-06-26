@@ -71,10 +71,6 @@ $ helm delete istio-base -n istio-system
 $ kubectl delete ns istio-ingress istio-ingress
 ```
 
-## [Ambient](https://istio.io/latest/docs/ambient/install/)
-
-### Helm
-
 ## [Bookinfo Demo](https://istio.io/latest/docs/examples/bookinfo/)
 
 ```bash
