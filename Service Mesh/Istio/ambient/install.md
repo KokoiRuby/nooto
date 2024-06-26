@@ -28,6 +28,7 @@ $ helm delete ztunnel -n istio-system
 $ helm delete istiod -n istio-system
 $ helm delete istio-base -n istio-system
 
+# cleanup
 $ kubectl delete namespace istio-system
 ```
 
@@ -35,11 +36,13 @@ $ kubectl delete namespace istio-system
 
 ```bash
 $ istioctl install --set profile=ambient --skip-confirmation
+
+# cleanup
+$ istioctl uninstall -y --purge
 ```
 
 ### [Getting Started](https://istio.io/latest/docs/ambient/getting-started/)
 
-:cry: [Issue](https://github.com/istio/istio/issues/51622)
 
 ```bash
 # make sure istio-injection is disabled
@@ -107,3 +110,14 @@ spec:
         value: /api/v1/products
 ```
 
+:cry: [Issue](https://github.com/istio/istio/issues/51622): unable to push CNI event, error was 500
+
+```bash
+# add & restart node
+$ cat > /etc/sysctl.d/00-noipv6.conf << EOF
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.eth0.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+EOF
+```

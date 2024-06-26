@@ -11,11 +11,20 @@ Ambient ≈ “Sidecar-less”, per-node L4 + optinoal per-namesapce L7.
 - L3/L4 → mTLS, AuthN, AuthZ, Telemetry.
 - [HBONE](https://istio.io/latest/docs/ambient/architecture/hbone/) tunneling protocol.
 
+
+
+![img](https://pic4.zhimg.com/80/v2-ecb1273afa276cd60f4b8702b6cdc0c7_1440w.webp)
+
+
+
+![img](https://pic4.zhimg.com/80/v2-557038dde4fc69b60f7f91fdb99a4e7b_1440w.webp)
+
 #### [Architecture](https://istio.io/latest/docs/ambient/architecture/)
 
 **Control Plane:** ztunnel xDS client & CA client → Istiod for conf & cert (of dst app).
 
 - **Pull (on-demand)** > Push (from Istiod → sidecars) → Istiod Pressure ↓
+- Less invasive.
 
 
 
