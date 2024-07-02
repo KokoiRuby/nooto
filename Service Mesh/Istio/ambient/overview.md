@@ -1,14 +1,20 @@
-Ambient ≈ “Sidecar-less”, per-node L4 + optinoal per-namesapce L7.
+Ambient ≈ “Sidecar-less”, per-node L4 + optinoal per-namesapce L7. Co-exist-table with "Sidecar" mode.
 
 `Waypoint proxioes` above
 
 - Envoy Deployment outside application pods.
-- L7 traffic enforcement.
+- L7
+  - Traffic Mgmt: Request routing, Circuit breaking, Rate limiting, Fault injection, Retry/Timeouts ...
+  - Security: Rich AuthZ.
+  - Observability: HTTP metrics, Access Logging, Tracing.
 
 `ztunnel` as base
 
 - Per-node daemon.
-- L3/L4 → mTLS, AuthN, AuthZ, Telemetry.
+- L4
+  - Traffic Mgmt: TCP routing.
+  - Security: mTLS, Simple AuthZ.
+  - Observability: TCP metrics & logging.
 - [HBONE](https://istio.io/latest/docs/ambient/architecture/hbone/) tunneling protocol.
 
 
